@@ -12,14 +12,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val v = listOf("Laurent", "Axel", "Guillaume", "Théo", "Samuel", "Louis", "Victor")
-        val vSorted = v.sortedBy { it.length }
+        val bros = listOf("Laurent", "Axel", "Guillaume", "Théo", "Samuel", "Louis", "Victor")
+        val brosSorted = bros.sortedBy { it.length }
 
-        Log.d("Names", vSorted.toString())
-        name_list.text = vSorted.toString()
+        Log.d("Names", brosSorted.toString())
+        name_list.text = brosSorted.toString()
 
         try_me.setOnClickListener {
-            hello.text = vSorted[Random.nextInt(0, v.size)]
+            hello.text = brosSorted[Random.nextInt(0, bros.size)]
             val constraint = try_me.layoutParams as ConstraintLayout.LayoutParams
             constraint.bottomToTop = hello.id
             constraint.topToTop = -1
