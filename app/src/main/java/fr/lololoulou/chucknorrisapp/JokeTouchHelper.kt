@@ -1,10 +1,10 @@
-package com.gopro.chucknorrisjokes
+package fr.lololoulou.chucknorrisapp
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 class JokeTouchHelper(
-    private val onJokeRemoved: ??? ,
+    private val onJokeRemoved: ???,
     private val onItemMoved: ???
 ) : ItemTouchHelper(
     object : ItemTouchHelper.SimpleCallback(

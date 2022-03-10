@@ -1,5 +1,4 @@
-package com.gopro.chucknorrisjokes
-
+package fr.lololoulou.chucknorrisapp
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import org.junit.Assert
