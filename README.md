@@ -1,6 +1,6 @@
 # Projet de création d'une application en Kotlin
 ***Auteurs***
-- Louis Desplanches
+- Louis Desplanche  
 - Laurent Delatte
 
 ## Context
