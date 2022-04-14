@@ -1,13 +1,15 @@
 package fr.lololoulou.chucknorrisapp
 
-import java.util.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Joke(
-    val createdAt: String,
-    val iconUrl: String,
+    val categories: List<String> = listOf(),
+    @SerialName("created_at") val createdAt: String,
+    @SerialName("icon_url") val iconUrl: String,
     val id: String,
-    val updatedAt: String,
-    val url : String,
-    val value : String,
-    val categories: List<String> = listOf()
+    @SerialName("updated_at") val updatedAt: String,
+    val url: String,
+    val value: String
 )

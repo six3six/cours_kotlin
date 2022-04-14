@@ -1,6 +1,6 @@
 package fr.lololoulou.chucknorrisapp
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
+import kotlinx.serialization.*
 import org.junit.Assert
 import org.junit.Test
 
@@ -22,16 +22,21 @@ class JokeSerializationTest {
         value = "Which came first - the chicken or the egg? Chuck Norris said it was the beer which came first, the hell with these damn animals!!!"
     )
 
-/*    @Test
+    @Test
     fun `serialization is correct`() {
-        val json = Json(JsonConfiguration.Stable).stringify(Joke.serializer(), baseJoke)
+        val json = Json.encodeToString(baseJoke)
         Assert.assertEquals(baseJson, json)
-
     }
 
     @Test
     fun `deserialization is correct`() {
-        val joke = Json(JsonConfiguration.Stable).parse(Joke.serializer(), baseJson)
+        val joke: Joke = Json.decodeFromString(baseJson)
         Assert.assertEquals(baseJoke, joke)
-    }*/
+    }
+
+    companion object {
+        private val Json = Json {
+            encodeDefaults = true
+        }
+    }
 }
