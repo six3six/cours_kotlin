@@ -1,10 +1,11 @@
 package fr.lololoulou.chucknorrisapp
 
+
 import io.reactivex.Single
 import retrofit2.http.GET
 
 
 interface JokeApiService {
-    @GET("url_path_extension")
+    @GET("jokes/random/")
     fun giveMeAJoke(): Single<Joke>
 }
