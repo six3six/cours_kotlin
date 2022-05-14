@@ -1,12 +1,11 @@
 package fr.lololoulou.chucknorrisapp
 
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class JokeAdapter(val onBottomReached: () -> Unit) :
     RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
-    private var jokes = listOf<Joke>()
+    private var jokes = mutableListOf<Joke>()
 
     inner class JokeViewHolder(private val jokeView: JokeView) :
         RecyclerView.ViewHolder(jokeView) {
@@ -16,27 +15,38 @@ class JokeAdapter(val onBottomReached: () -> Unit) :
     }
 
     fun addJoke(joke: Joke) {
-        this.jokes = jokes + joke
+        this.jokes.add(joke)
         this.notifyItemInserted(jokes.size - 1)
     }
 
     fun addJokes(jokes: List<Joke>) {
         val firstIndex = this.jokes.size - 1
-        this.jokes = this.jokes + jokes
+        this.jokes.addAll(jokes)
         this.notifyItemRangeInserted(firstIndex, jokes.size)
+    }
+
+    fun swapJoke(jokeIndex: Int, target: Int) {
+        val joke = jokes[jokeIndex]
+        jokes[jokeIndex] = jokes[target]
+        jokes[target] = joke
+
+        this.notifyItemMoved(jokeIndex, target)
+    }
+
+    fun removeJoke(jokeIndex: Int) {
+        jokes.removeAt(jokeIndex)
+
+        this.notifyItemRemoved(jokeIndex)
+    }
+
+    fun wipe() {
+        val size = jokes.size
+        jokes = mutableListOf<Joke>()
+        this.notifyItemRangeRemoved(0, size)
     }
 
     //Create Joke View Holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JokeViewHolder {
-        /* val testView: ConstraintLayout =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.joke_layout, parent, false) as ConstraintLayout*/
-
-        val jokeView = JokeView(parent.context)
-        jokeView.layoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
         return JokeViewHolder(JokeView(parent.context))
     }
 
@@ -66,4 +76,6 @@ class JokeAdapter(val onBottomReached: () -> Unit) :
     override fun getItemCount() = jokes.size
 
     fun getJokes() = jokes
+
+
 }

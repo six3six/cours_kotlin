@@ -4,8 +4,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 class JokeTouchHelper(
-    //private val onJokeRemoved: ???,
-    //private val onItemMoved: ???
+    private val adapter: JokeAdapter
 ) : ItemTouchHelper(
     object : ItemTouchHelper.SimpleCallback(
         UP or DOWN,
@@ -15,9 +14,14 @@ class JokeTouchHelper(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
-        ): Boolean = TODO("use it to reorder items")
+        ): Boolean {
+            adapter.swapJoke(viewHolder.bindingAdapterPosition, target.bindingAdapterPosition)
+            return true
+        }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) =
-            TODO("use it to delete items")
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+            adapter.removeJoke(viewHolder.bindingAdapterPosition)
+
+        }
     }
 )
