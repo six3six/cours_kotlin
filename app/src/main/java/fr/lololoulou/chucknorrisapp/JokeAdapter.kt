@@ -6,10 +6,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
-class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
+class JokeAdapter(val onBottomReached: () -> Unit) :
+    RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
     private var jokes = listOf<Joke>()
 
-    inner class JokeViewHolder(val constraintLayout: ConstraintLayout) :
+    inner class JokeViewHolder(private val constraintLayout: ConstraintLayout) :
         RecyclerView.ViewHolder(constraintLayout) {
         fun updateJoke(text: String) {
             val constraintValue: TextView =
@@ -18,7 +19,7 @@ class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
         }
     }
 
-    fun addJoke(joke: Joke){
+    fun addJoke(joke: Joke) {
         this.jokes = jokes + joke
         this.notifyItemInserted(jokes.size - 1)
     }
@@ -35,6 +36,22 @@ class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
     override fun onBindViewHolder(holder: JokeAdapter.JokeViewHolder, position: Int) {
         holder.updateJoke(jokes[position].value)
     }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+
+        super.onAttachedToRecyclerView(recyclerView)
+        recyclerView.addOnScrollListener(JokeScrollListener(onBottomReached))
+    }
+
+    inner class JokeScrollListener(private val onBottomReached: () -> Unit) : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (recyclerView.canScrollVertically(1)){
+                this.onBottomReached()
+            }
+        }
+    }
+
 
     // Return the size of jokes dataset
     override fun getItemCount() = jokes.size

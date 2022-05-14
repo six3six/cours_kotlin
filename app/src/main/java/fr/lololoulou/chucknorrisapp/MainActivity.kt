@@ -21,13 +21,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
-        myView.layoutManager = LinearLayoutManager(this)
-        myView.adapter = JokeAdapter()
 
         val jokeService = JokeApiServiceFactory().create()
 
+        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
+        myView.layoutManager = LinearLayoutManager(this)
+        myView.adapter = JokeAdapter(onBottomReached = {addJokes(jokeService)})
+
+
+        addJokes(jokeService)
+    }
+
+    fun addJokes(jokeService: JokeApiService) {
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
 
         progressBar.visibility = View.VISIBLE
         compositeDisposable.add(
