@@ -10,7 +10,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 //simport kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,20 +23,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         val jokeService = JokeApiServiceFactory().create()
 
-        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
-        myView.layoutManager = LinearLayoutManager(this)
-        myView.adapter = JokeAdapter(onBottomReached = {addJokes(jokeService)})
+        val jokeView = findViewById<RecyclerView>(R.id.recycleView_joke)
+        jokeView.layoutManager = LinearLayoutManager(this)
+        jokeView.adapter = JokeAdapter(onBottomReached = { fetchAndAddJokes(jokeService) })
 
-
-        addJokes(jokeService)
+        val serializedJokes = savedInstanceState?.getString("jokes")
+        if (serializedJokes != null) {
+            val jokes = Json.decodeFromString<List<Joke>>(serializedJokes)
+            (jokeView.adapter as? JokeAdapter)?.addJokes(jokes)
+        } else {
+            fetchAndAddJokes(jokeService)
+        }
     }
 
-    fun addJokes(jokeService: JokeApiService) {
+    private fun fetchAndAddJokes(jokeService: JokeApiService) {
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
+        val jokeView = findViewById<RecyclerView>(R.id.recycleView_joke)
 
         progressBar.visibility = View.VISIBLE
         compositeDisposable.add(
@@ -42,10 +48,18 @@ class MainActivity : AppCompatActivity() {
                 .observeOn(AndroidSchedulers.mainThread()).doFinally {
                     progressBar.visibility = View.INVISIBLE
                 }.subscribeBy(
-                    onNext = { joke -> (myView.adapter as? JokeAdapter)?.addJoke(joke) },
+                    onNext = { joke -> (jokeView.adapter as? JokeAdapter)?.addJoke(joke) },
                     onError = { error -> error.printStackTrace() },
                 )
         )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val myView = findViewById<RecyclerView>(R.id.recycleView_joke)
+        val jokes = (myView?.adapter as? JokeAdapter)?.getJokes();
+        outState.putString("jokes", Json.encodeToString(jokes))
+
+        super.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
