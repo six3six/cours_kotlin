@@ -12,10 +12,10 @@
         android:background="#0000FF"
         android:text="TextView"
         android:textSize="14.5sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
