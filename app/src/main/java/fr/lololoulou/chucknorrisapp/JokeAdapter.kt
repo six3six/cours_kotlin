@@ -1,6 +1,5 @@
 package fr.lololoulou.chucknorrisapp
 
-import JokeList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -8,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
-    private val jokes = JokeList.getJokeList()
+    private var jokes = listOf<Joke>()
 
     inner class JokeViewHolder(val constraintLayout: ConstraintLayout) :
         RecyclerView.ViewHolder(constraintLayout) {
@@ -17,6 +16,11 @@ class JokeAdapter : RecyclerView.Adapter<JokeAdapter.JokeViewHolder>() {
                 constraintLayout.findViewById<TextView>(R.id.textView_joke_layout)
             constraintValue.text = text
         }
+    }
+
+    fun addJoke(joke: Joke){
+        this.jokes = jokes + joke
+        this.notifyItemInserted(jokes.size - 1)
     }
 
     //Create Joke View Holder
