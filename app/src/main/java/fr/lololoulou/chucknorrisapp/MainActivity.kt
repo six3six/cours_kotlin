@@ -29,14 +29,13 @@ class MainActivity : AppCompatActivity() {
 
         val progressBar = findViewById<ProgressBar>(R.id.progress_bar)
 
-
         progressBar.visibility = View.VISIBLE
         compositeDisposable.add(
-            jokeService.giveMeAJoke().delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
+            jokeService.giveMeAJoke().repeat(10).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).doFinally {
                     progressBar.visibility = View.INVISIBLE
                 }.subscribeBy(
-                    onSuccess = { joke -> (myView.adapter as? JokeAdapter)?.addJoke(joke) },
+                    onNext = { joke -> (myView.adapter as? JokeAdapter)?.addJoke(joke) },
                     onError = { error -> error.printStackTrace() },
                 )
         )
